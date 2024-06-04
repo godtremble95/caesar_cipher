@@ -18,9 +18,13 @@ def encrypt_char(char, shift_factor, byte_range)
 
   # if new value is out of range, put in range to 'wrap' around  (z to a, a to z, etc.)
   if new_byte > byte_range[1]
-    new_byte = new_byte - 26 - (26 * (shift_factor / 26))
+    ((new_byte - byte_range[1]) / 26.0).ceil.times do    # I spent way too long getting this
+      new_byte = new_byte - 26                           # to work with shift_factors >= 26
+    end                                                  # ...no I don't want to talk about it
   elsif new_byte < byte_range[0]
-    new_byte = new_byte + 26 + (26 * (shift_factor / 26))
+    ((byte_range[0] - new_byte) / 26.0).ceil.times do
+      new_byte = new_byte + 26
+    end
   end
   return new_byte.chr #return new byte as character
 end
